@@ -104,13 +104,58 @@
     overflow-x: auto;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
-    padding-bottom: 12px;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: var(--rule) transparent;
+    scrollbar-width: none;        /* Firefox */
+    -ms-overflow-style: none;     /* old Edge/IE */
   }
-  .figures::-webkit-scrollbar { height: 7px; }
-  .figures::-webkit-scrollbar-thumb { background: var(--rule); }
+  .figures::-webkit-scrollbar { display: none; }  /* WebKit */
+
+  /* ---- scroll affordance ---- */
+  .figures-wrap { position: relative; }
+  /* soft fade at the trailing edge, hinting content continues */
+  .figures-wrap::after {
+    content: "";
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 72px;
+    pointer-events: none;
+    background: linear-gradient(to right, transparent, var(--bg));
+    opacity: 1;
+    transition: opacity 0.35s ease;
+  }
+  .figures-wrap[data-scroll="end"]::after,
+  .figures-wrap[data-scroll="none"]::after { opacity: 0; }
+
+  /* ---- chevron nav ---- */
+  .figures-nav {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 14px;
+  }
+  .work-title { display: flex; align-items: baseline; gap: 10px; }
+  .work-title h2 { font-size: 14px; font-weight: 400; }
+  .work-title .year { font-style: italic; color: var(--grey); }
+  .fig-chevs { display: flex; gap: 8px; flex: 0 0 auto; align-self: center; }
+  .figures-wrap[data-scroll="none"] + .figures-nav .fig-chevs { display: none; }
+  .fig-chev {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: none;
+    border: var(--rule-w) solid var(--rule);
+    border-radius: 50%;
+    color: var(--grey);
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+  }
+  .fig-chev svg { width: 14px; height: 14px; display: block; }
+  .fig-chev:hover:not(:disabled) { color: var(--ink); border-color: var(--ink); }
+  .fig-chev:disabled { opacity: 0.3; cursor: default; }
   .figures figure {
     flex: 0 0 auto;
     width: min(62vw, 560px);
@@ -158,13 +203,9 @@
   }
 
   .work-meta {
-    margin-top: 26px;
+    margin-top: 8px;
     max-width: 640px;
   }
-  .work-meta .meta-info { margin-bottom: 12px; }
-  .meta-info { display: flex; flex-direction: column; gap: 16px; }
-  .work-meta h2 { font-size: 14px; font-weight: 400; }
-  .work-meta .year { font-style: italic; }
   .work-desc p + p { margin-top: 16px; }
   .work-desc .more { display: block; margin-top: 16px; letter-spacing: 3px; }
 
@@ -273,6 +314,7 @@
     <div class="works">
 
       <article class="work">
+        <div class="figures-wrap" data-scroll="more">
         <div class="figures">
           <figure class="a reveal" data-img="images/logo.webp" style="background-image:url('images/logo.webp')" aria-label="Heidi — logo"></figure>
           <figure class="a reveal" data-img="images/c_billboard.webp" style="background-image:url('images/c_billboard.webp')" aria-label="Heidi — Las Vegas billboard"></figure>
@@ -285,13 +327,22 @@
             <span class="vlabel">Brand film — coming soon</span>
           </figure>
         </div>
-        <div class="work-meta reveal">
-          <div class="meta-info">
-            <div>
-              <h2>Heidi</h2>
-              <p class="year">2025</p>
-            </div>
+        </div>
+        <div class="figures-nav reveal">
+          <div class="work-title">
+            <h2>Heidi</h2>
+            <p class="year">2025 - present</p>
           </div>
+          <div class="fig-chevs" aria-label="Scroll images">
+            <button class="fig-chev" data-dir="prev" type="button" aria-label="Previous images">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 L8 12 L15 19"/></svg>
+            </button>
+            <button class="fig-chev" data-dir="next" type="button" aria-label="Next images">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5 L16 12 L9 19"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="work-meta reveal">
           <div class="work-desc">
             <p>Throughout my time at Heidi, I’ve been on a journey starting with helping
             execute on the full rebrand of the company, raising a series c, launching
@@ -383,6 +434,46 @@
   lightbox.addEventListener('click', closeLightbox);
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeLightbox();
+  });
+
+  /* ---- horizontal scroll affordance + chevron nav ---- */
+  document.querySelectorAll('.figures-wrap').forEach((wrap) => {
+    const row = wrap.querySelector('.figures');
+    if (!row) return;
+    // nav is the wrap's next sibling
+    const nav = wrap.nextElementSibling && wrap.nextElementSibling.classList.contains('figures-nav')
+      ? wrap.nextElementSibling : null;
+    const prevBtn = nav && nav.querySelector('[data-dir="prev"]');
+    const nextBtn = nav && nav.querySelector('[data-dir="next"]');
+
+    function update() {
+      const overflow = row.scrollWidth - row.clientWidth;
+      const atStart = row.scrollLeft <= 2;
+      const atEnd = row.scrollLeft >= overflow - 2;
+      if (overflow <= 2) {
+        wrap.dataset.scroll = 'none'; // fits — no cue needed
+      } else if (atEnd) {
+        wrap.dataset.scroll = 'end';  // reached the end — hide fade
+      } else {
+        wrap.dataset.scroll = 'more'; // more to see — show fade
+      }
+      if (prevBtn) prevBtn.disabled = atStart;
+      if (nextBtn) nextBtn.disabled = atEnd;
+    }
+
+    function scrollByCards(dir) {
+      // advance by roughly one tile width (incl. gap)
+      const first = row.querySelector('figure');
+      const gap = parseFloat(getComputedStyle(row).columnGap) || 14;
+      const step = first ? first.getBoundingClientRect().width + gap : row.clientWidth * 0.8;
+      row.scrollBy({ left: dir * step, behavior: 'smooth' });
+    }
+    if (prevBtn) prevBtn.addEventListener('click', () => scrollByCards(-1));
+    if (nextBtn) nextBtn.addEventListener('click', () => scrollByCards(1));
+
+    row.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
   });
 </script>
 
