@@ -10,35 +10,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #FFFFFF;
-    --ink: #111111;
-    --grey: #767676;
-    --hairline: #DCDCDC;
-    --rule: #C9C9C9;
-    --placeholder-a: #EDF0E4;
-    --placeholder-b: #E4EBE0;
+    --bg: #17181A;
+    --ink: #ECEBE5;
+    --grey: #90918B;
+    --hairline: #33352F;
+    --rule: #3C3E38;
+    --placeholder-a: #24261F;
+    --placeholder-b: #22261F;
     --serif: "Newsreader", Georgia, "Times New Roman", serif;
     --lh: 1.35;
     --rule-w: 1px;
   }
-
-  /* ---- mood palettes ---- */
-  body[data-mood="warm"] {
-    --bg: #F7F3EC; --ink: #2A2622; --grey: #8C8274; --hairline: #E0D9CC;
-    --rule: #D0C8B9; --placeholder-a: #ECE4D5; --placeholder-b: #E7E0D0;
-  }
-  body[data-mood="ink"] {
-    --bg: #17181A; --ink: #ECEBE5; --grey: #90918B; --hairline: #33352F;
-    --rule: #3C3E38; --placeholder-a: #24261F; --placeholder-b: #22261F;
-  }
-  body[data-mood="botanical"] {
-    --bg: #F2F6EB; --ink: #23301C; --grey: #6F7A63; --hairline: #D4DDC6;
-    --rule: #C4CFB1; --placeholder-a: #DBE7C8; --placeholder-b: #CFE0C4;
-  }
-
-  /* ---- rule character ---- */
-  body[data-rules="bold"] { --rule: var(--ink); --hairline: var(--ink); --rule-w: 2px; }
-  body[data-rules="none"] { --rule-w: 0px; }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -271,69 +253,6 @@
     will-change: transform;
   }
   .lightbox-inner.b { background: var(--placeholder-b); }
-
-  /* ================= tweaks panel ================= */
-  .tweak-fab {
-    position: fixed;
-    right: 16px; bottom: 44px;
-    z-index: 30;
-    width: 34px; height: 34px;
-    border: 1px solid var(--ink);
-    border-radius: 50%;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--serif);
-    font-size: 15px;
-    font-style: italic;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.2s ease, color 0.2s ease;
-  }
-  .tweak-fab:hover { background: var(--ink); color: var(--bg); }
-
-  .tweak-panel {
-    position: fixed;
-    right: 16px; bottom: 88px;
-    z-index: 30;
-    width: 264px;
-    background: var(--bg);
-    border: 1px solid var(--ink);
-    padding: 16px 16px 18px;
-    color: var(--ink);
-    transform: translateY(8px);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.24s ease, transform 0.24s ease, visibility 0s linear 0.24s;
-  }
-  .tweak-panel.open {
-    opacity: 1; visibility: visible; transform: translateY(0);
-    transition: opacity 0.24s ease, transform 0.24s ease, visibility 0s;
-  }
-  .tweak-panel h3 {
-    font-size: 14px; font-weight: 400; font-style: italic;
-    margin-bottom: 14px; display: flex; justify-content: space-between; align-items: baseline;
-  }
-  .tweak-panel h3 button {
-    font-family: var(--serif); font-size: 14px; background: none;
-    border: none; cursor: pointer; color: var(--grey);
-  }
-  .tweak-panel h3 button:hover { color: var(--ink); }
-  .tweak-group { margin-bottom: 16px; }
-  .tweak-group:last-child { margin-bottom: 0; }
-  .tweak-group > label {
-    display: block; font-size: 12px; font-style: italic;
-    color: var(--grey); margin-bottom: 7px; letter-spacing: 0.01em;
-  }
-  .seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; }
-  .seg button {
-    font-family: var(--serif); font-size: 12px;
-    background: var(--bg); color: var(--ink);
-    border: 1px solid var(--rule); border-left-width: 0;
-    padding: 6px 4px; cursor: pointer; transition: background 0.15s ease, color 0.15s ease;
-  }
-  .seg button:first-child { border-left-width: 1px; }
-  .seg button:hover { color: var(--grey); }
-  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
 </style>
 </head>
 <body>
@@ -406,30 +325,6 @@
   <div class="lightbox-inner" id="lightboxInner"></div>
 </div>
 
-<button class="tweak-fab" id="tweakFab" type="button" aria-label="Tweaks">*</button>
-<div class="tweak-panel" id="tweakPanel">
-  <h3>Tweaks <button type="button" id="tweakClose">close</button></h3>
-
-  <div class="tweak-group">
-    <label>Mood</label>
-    <div class="seg" data-tweak="mood">
-      <button data-val="gallery">Gallery</button>
-      <button data-val="warm">Warm</button>
-      <button data-val="ink">Ink</button>
-      <button data-val="botanical">Botanical</button>
-    </div>
-  </div>
-
-  <div class="tweak-group">
-    <label>Rules</label>
-    <div class="seg" data-tweak="rules">
-      <button data-val="hairline">Hairline</button>
-      <button data-val="bold">Bold</button>
-      <button data-val="none">None</button>
-    </div>
-  </div>
-</div>
-
 <script>
   /* ---- lightbox ---- */
   const lightbox = document.getElementById('lightbox');
@@ -489,43 +384,6 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeLightbox();
   });
-
-  /* ---- tweaks ---- */
-  const body = document.body;
-  const STORE = 'lc-tweaks';
-  const defaults = { mood: 'gallery', rules: 'hairline' };
-  let tweaks;
-  try { tweaks = Object.assign({}, defaults, JSON.parse(localStorage.getItem(STORE)) || {}); }
-  catch (e) { tweaks = Object.assign({}, defaults); }
-
-  function saveTweaks() {
-    try { localStorage.setItem(STORE, JSON.stringify(tweaks)); } catch (e) {}
-  }
-  function applyTweaks() {
-    body.dataset.mood = tweaks.mood;
-    body.dataset.rules = tweaks.rules;
-    document.querySelectorAll('.seg[data-tweak]').forEach((seg) => {
-      const key = seg.dataset.tweak;
-      seg.querySelectorAll('button').forEach((b) => {
-        b.setAttribute('aria-pressed', String(b.dataset.val === tweaks[key]));
-      });
-    });
-  }
-
-  document.querySelectorAll('.seg[data-tweak]').forEach((seg) => {
-    seg.addEventListener('click', (e) => {
-      const btn = e.target.closest('button');
-      if (!btn) return;
-      tweaks[seg.dataset.tweak] = btn.dataset.val;
-      applyTweaks(); saveTweaks();
-    });
-  });
-
-  const tweakPanel = document.getElementById('tweakPanel');
-  document.getElementById('tweakFab').addEventListener('click', () => tweakPanel.classList.toggle('open'));
-  document.getElementById('tweakClose').addEventListener('click', () => tweakPanel.classList.remove('open'));
-
-  applyTweaks();
 </script>
 
 </body>
