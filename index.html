@@ -79,6 +79,7 @@
     letter-spacing: 0.01em;
     line-height: 1.1;
     color: var(--ink);
+    cursor: default;
   }
   .site-header .contact-list {
     list-style: none;
@@ -100,6 +101,7 @@
      in a soft circle around the pointer via a masked overlay. The base
      text stays white everywhere the mask doesn't reach. ---- */
   .spot-hover {
+    display: inline-block;
     position: relative;
     --mx: -9999px;
     --my: -9999px;
@@ -158,6 +160,7 @@
   }
   .work-title { display: flex; align-items: baseline; gap: 10px; }
   .work-title h2 { font-size: 14px; font-weight: 400; }
+  .work-title h2 a { color: var(--ink); text-decoration: none; }
   .work-title .year { font-style: italic; color: var(--grey); }
   .fig-chevs { display: flex; gap: 8px; flex: 0 0 auto; align-self: center; }
   .figures-wrap[data-scroll="none"] + .figures-nav .fig-chevs { display: none; }
@@ -225,7 +228,7 @@
   }
 
   .work-meta {
-    margin-top: 8px;
+    margin-top: 2px;
     max-width: 640px;
   }
   .work-desc p + p { margin-top: 16px; }
@@ -352,7 +355,7 @@
         </div>
         <div class="figures-nav reveal">
           <div class="work-title">
-            <h2>Heidi</h2>
+            <h2><a class="spot-hover" data-text="Heidi" href="https://www.heidihealth.com" target="_blank" rel="noopener">Heidi</a></h2>
             <p class="year">2025 - present</p>
           </div>
           <div class="fig-chevs" aria-label="Scroll images">
