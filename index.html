@@ -80,7 +80,6 @@
     line-height: 1.1;
     color: var(--ink);
   }
-  .site-header .site-name:hover { color: var(--grey); }
   .site-header .contact-list {
     list-style: none;
     display: flex;
@@ -92,8 +91,31 @@
     color: var(--ink);
   }
   .site-header .contact-list li { margin-bottom: 2px; }
-  .site-header .contact-list a { color: var(--ink); }
-  .site-header .contact-list a:hover { color: var(--grey); }
+  .site-header .contact-list a {
+    display: inline-block;
+    color: var(--ink);
+  }
+
+  /* ---- cursor spotlight: a grey duplicate of the text, revealed only
+     in a soft circle around the pointer via a masked overlay. The base
+     text stays white everywhere the mask doesn't reach. ---- */
+  .spot-hover {
+    position: relative;
+    --mx: -9999px;
+    --my: -9999px;
+  }
+  .spot-hover::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    color: var(--grey);
+    pointer-events: none;
+    -webkit-mask-image: radial-gradient(circle 48px at var(--mx) var(--my), black 0%, transparent 100%);
+            mask-image: radial-gradient(circle 48px at var(--mx) var(--my), black 0%, transparent 100%);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .spot-hover::after { display: none; }
+  }
 
   /* ================= work ================= */
   .work { margin-bottom: 72px; }
@@ -301,11 +323,11 @@
 <div class="page">
 
   <header class="site-header reveal">
-    <a class="site-name" href="#">Lewis Connolly</a>
+    <span class="site-name spot-hover" data-text="Lewis Connolly">Lewis Connolly</span>
     <ul class="contact-list">
-      <li><a href="mailto:lewisjconnollydesign@gmail.com">email</a></li>
-      <li><a href="https://www.linkedin.com/in/lewisjconnolly/" target="_blank" rel="noopener">linkedin</a></li>
-      <li><a href="https://x.com/lewjc_" target="_blank" rel="noopener">x</a></li>
+      <li><a class="spot-hover" data-text="email" href="mailto:lewisjconnollydesign@gmail.com">email</a></li>
+      <li><a class="spot-hover" data-text="linkedin" href="https://www.linkedin.com/in/lewisjconnolly/" target="_blank" rel="noopener">linkedin</a></li>
+      <li><a class="spot-hover" data-text="x" href="https://x.com/lewjc_" target="_blank" rel="noopener">x</a></li>
     </ul>
   </header>
 
@@ -377,6 +399,19 @@
 </div>
 
 <script>
+  /* ---- cursor spotlight over header text ---- */
+  document.querySelectorAll('.spot-hover').forEach((el) => {
+    el.addEventListener('mousemove', (e) => {
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+    el.addEventListener('mouseleave', () => {
+      el.style.setProperty('--mx', '-9999px');
+      el.style.setProperty('--my', '-9999px');
+    });
+  });
+
   /* ---- lightbox ---- */
   const lightbox = document.getElementById('lightbox');
   const lightboxInner = document.getElementById('lightboxInner');
