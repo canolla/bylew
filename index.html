@@ -203,7 +203,7 @@
   }
   figure.a { background: var(--placeholder-a); }
   figure.b { background: var(--placeholder-b); }
-  figure[data-img] {
+  .figures figure[data-img] {
     background-size: cover;
     background-position: center;
     color: transparent;
@@ -259,6 +259,12 @@
     padding: 0;
     cursor: pointer;
     overflow: hidden;
+  }
+  .expl-grid figure[data-img] {
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: transparent;
   }
   .expl-grid figure.expl-video { cursor: default; background: #000; }
   .expl-grid figure.expl-video video {
@@ -391,12 +397,12 @@
     <section class="explorations reveal">
       <div class="expl-head">Explorations</div>
       <div class="expl-grid">
-        <figure class="reveal" data-img="images/expl-oliobank.webp" style="--i:0; background-image:url('images/expl-oliobank.webp')" aria-label="Exploration — OlioBank landing page"></figure>
-        <figure class="reveal" data-img="images/expl-lumen.webp" style="--i:1; background-image:url('images/expl-lumen.webp')" aria-label="Exploration — Lumen Ridge Trail hiking page"></figure>
-        <figure class="reveal" data-img="images/expl-notamember.webp" style="--i:2; background-image:url('images/expl-notamember.webp')" aria-label="Exploration — sign up screen"></figure>
-        <figure class="reveal" data-img="images/expl-blueprint.webp" style="--i:3; background-image:url('images/expl-blueprint.webp')" aria-label="Exploration — 3D wireframe grid"></figure>
-        <figure class="reveal" data-img="images/expl-realestate.webp" style="--i:4; background-image:url('images/expl-realestate.webp')" aria-label="Exploration — real estate listing spreads"></figure>
-        <figure class="reveal" data-img="images/expl-cards.webp" style="--i:5; background-image:url('images/expl-cards.webp')" aria-label="Exploration — climate data cards"></figure>
+        <figure class="reveal" data-img="images/expl-oliobank.webp" style="--i:0; background-color:#202020; background-image:url('images/expl-oliobank.webp')" aria-label="Exploration — OlioBank landing page"></figure>
+        <figure class="reveal" data-img="images/expl-lumen.webp" style="--i:1; background-color:#9090b8; background-image:url('images/expl-lumen.webp')" aria-label="Exploration — Lumen Ridge Trail hiking page"></figure>
+        <figure class="reveal" data-img="images/expl-notamember.webp" style="--i:2; background-color:#181818; background-image:url('images/expl-notamember.webp')" aria-label="Exploration — sign up screen"></figure>
+        <figure class="reveal" data-img="images/expl-blueprint.webp" style="--i:3; background-color:#f0f0f0; background-image:url('images/expl-blueprint.webp')" aria-label="Exploration — 3D wireframe grid"></figure>
+        <figure class="reveal" data-img="images/expl-realestate.webp" style="--i:4; background-color:#000000; background-image:url('images/expl-realestate.webp')" aria-label="Exploration — real estate listing spreads"></figure>
+        <figure class="reveal" data-img="images/expl-cards.webp" style="--i:5; background-color:#f8f8f8; background-image:url('images/expl-cards.webp')" aria-label="Exploration — climate data cards"></figure>
         <figure class="reveal expl-video" style="--i:6" data-no-lightbox aria-label="Exploration — animated loop">
           <video poster="images/expl-stonks-poster.webp" autoplay loop muted playsinline>
             <source src="images/expl-stonks.webm" type="video/webm">
